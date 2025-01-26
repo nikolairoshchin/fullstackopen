@@ -30,6 +30,7 @@ console.log(votes)
   return (
     <div>
       {anecdotes[selected]}
+      <p>has {votes[selected]} votes</p>
       <p>
         <button onClick={handleVotes} >votes</button>
         <button onClick={handleClick} >next anecdote</button>
