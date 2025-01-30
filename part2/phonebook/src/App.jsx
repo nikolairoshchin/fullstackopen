@@ -14,8 +14,20 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
 
+  const isNameExist = () => {
+    let isName = false
+    persons.map(person => {
+      if (person.name === newName) isName = true
+    })
+    return isName
+  }
+
   const addName = ( event ) =>{
     event.preventDefault()
+    if (isNameExist()) {
+      alert( `${newName} is already added to phonebook` )
+      return
+    }
     const newPerson = {
       name: newName
     }
