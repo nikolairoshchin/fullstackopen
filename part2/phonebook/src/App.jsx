@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import FilterShown from './components/FilterShown'
 import AddName from './components/AddName'
-import axios from 'axios'
+import phonebookService from './services/phonebook'
 
 
 const App = () => {
@@ -10,10 +10,10 @@ const App = () => {
   const [filterShow, setFilterShow] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    phonebookService
+      .getAll()
       .then(response => {
-        setPersons(response.data)
+        setPersons(response)
       })
   }, [])
 
