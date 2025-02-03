@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useState } from 'react'
 
 const AddName = ( {persons, setPersons} ) => {
@@ -19,16 +20,18 @@ const AddName = ( {persons, setPersons} ) => {
       return
     }
     
-    const newId = persons.at(-1).id + 1
     const newPerson = {
       name: newName,
       number: newNumber,
-      id: newId
     }
-    setPersons(persons.concat(newPerson))
-    setNewName('')
-    setNewNumber('')
-    }
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+    })
+  }
   
   const handleNameChange = (event) => {
     setNewName(event.target.value)    
