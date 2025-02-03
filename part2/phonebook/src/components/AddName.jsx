@@ -5,32 +5,33 @@ const AddName = ( {persons, setPersons} ) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
-  const isNameExist = () => {
-    let isName = false
-    persons.map(person => {
-      if (person.name === newName) isName = true
-    })
-    return isName
-  }
-
-  const addName = ( event ) =>{
+  const addName = ( event ) =>{    
     event.preventDefault()
-    if (isNameExist()) {
-      alert( `${newName} is already added to phonebook` )
-      return
+    const pers = persons.find(p => p.name === newName)
+    if (pers) {
+      const changedPerson = {...pers, number: newNumber}
+ 
+      if (window.confirm( `${newName} is already added to phonebook, replace the old number with a new one?` ))
+        {
+          phonebookService
+          .update(changedPerson.id, changedPerson)
+          .then(response => {
+            setPersons(persons.map(person => person.id === response.id ? response : person))
+          })
+        }
+    } else {
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      }
+      phonebookService
+        .create(newPerson)
+        .then(response => {
+          setPersons(persons.concat(response))
+      })
     }
-    
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-    }
-    phonebookService
-      .create(newPerson)
-      .then(response => {
-        setPersons(persons.concat(response))
-        setNewName('')
-        setNewNumber('')
-    })
+    setNewName('')
+    setNewNumber('')
   }
   
   const handleNameChange = (event) => {
