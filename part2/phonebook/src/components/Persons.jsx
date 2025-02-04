@@ -1,6 +1,6 @@
 import phonebookService from '../services/phonebook'
 
-const Persons = ( {persons, setPersons, filterShow} ) => {
+const Persons = ( {persons, setPersons, filterShow } ) => {
   const filteredPersons = persons.filter(person => 
     ((person.name).
     toLowerCase()).
@@ -12,6 +12,7 @@ const Persons = ( {persons, setPersons, filterShow} ) => {
         .remove(id)
         .then(response => {
         setPersons(persons.filter(person => person.id != response.id))
+        showMessage(`${response.name} was deleted succefully`)
       })
     }
   }
