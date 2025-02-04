@@ -1,9 +1,16 @@
 import { useState } from 'react'
 import phonebookService from '../services/phonebook'
 
-const AddName = ( {persons, setPersons} ) => {
+const AddName = ( {persons, setPersons, setMessage} ) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+
+  const showMessage = (text) => {
+    setMessage(text)
+            setTimeout(() => {
+              setMessage(null)
+            }, 3000)
+  }
 
   const addName = ( event ) =>{    
     event.preventDefault()
@@ -17,6 +24,7 @@ const AddName = ( {persons, setPersons} ) => {
           .update(changedPerson.id, changedPerson)
           .then(response => {
             setPersons(persons.map(person => person.id === response.id ? response : person))
+            showMessage(`Number of ${response.name} was changed`)
           })
         }
     } else {
@@ -28,6 +36,7 @@ const AddName = ( {persons, setPersons} ) => {
         .create(newPerson)
         .then(response => {
           setPersons(persons.concat(response))
+          showMessage(`${response.name} was added`)
       })
     }
     setNewName('')
