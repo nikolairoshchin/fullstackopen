@@ -14,17 +14,23 @@ const CountryData = ( {show} ) => {
   )
 }
 
-const Country = ( {show} ) => {
+const Country = ( {show, setFindCountry} ) => {
+  const handleShowButton = (countryName) => {
+    setFindCountry(countryName)
+  }
+  
   return (
     <>
     {show.map(country => 
-        <div key={country.name.common}> {country.name.common} </div>)
+        <div key={country.name.common}> {country.name.common} 
+          <button onClick={() => handleShowButton(country.name.common)} >show</button>
+        </div>)
     }
     </>
   )
 }
 
-const Countries = ({ countriesList, findCountry }) => {
+const Countries = ({ countriesList, findCountry, setFindCountry }) => {
   const show = countriesList.filter(country => 
     country.name.common
     .toLowerCase()
@@ -34,7 +40,7 @@ const Countries = ({ countriesList, findCountry }) => {
   switch (true) {
     case (show.length === 0): return null
     case (show.length === 1): return <CountryData show={show} />
-    case (show.length < 10): return <Country show={show} />
+    case (show.length < 10): return <Country show={show} setFindCountry={setFindCountry} />
     default: return <>'Too many matches, specify another filter'</>
   }
 }
@@ -59,7 +65,7 @@ function App() {
       value={findCountry}
       onChange={handleFindCountry}></input>
     <div>
-      <Countries countriesList={countriesList} findCountry={findCountry} />
+      <Countries countriesList={countriesList} findCountry={findCountry} setFindCountry={setFindCountry} />
     </div>
     </>
   )
