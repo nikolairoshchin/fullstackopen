@@ -14,8 +14,9 @@ const reverse = (string) => {
     ? 0
     : array.reduce(reducer, 0) / array.length
   }
-  
+
+   
   module.exports = {
     reverse,
-    average,
+    average
   }
