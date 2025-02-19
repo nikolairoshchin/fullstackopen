@@ -34,6 +34,26 @@ test('unique identifier property of the blog is id', async () => {
     assert.notEqual(response.body[0].id, undefined)
 })
 
+test('http post request', async () => {
+const newBlog = {
+    title: "Test of new blog",
+    author: "Nikolai Roshchin",
+    url: "https://localhost.com/",
+    likes: 70
+}
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    assert.strictEqual( response.body.length, listWithManyBlogs.blogs.length + 1 )
+    const content = response.body[response.body.length-1].author
+    assert.strictEqual( content, 'Nikolai Roshchin' )
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
