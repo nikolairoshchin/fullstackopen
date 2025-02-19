@@ -11,6 +11,11 @@ const blogSchema = new mongoose.Schema({
     likes: Number
   })
 
+blogSchema.pre('save', async function(next) {
+  if (this.likes === undefined) this.likes = 0
+  next()
+})
+
   blogSchema.set('toJSON', {
     transform: (document, returnedObject) => {
       returnedObject.id = returnedObject._id.toString()
