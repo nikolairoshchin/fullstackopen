@@ -59,7 +59,7 @@ test('verifies that likes property will default to 0 is missing', async () => {
     title: "Test of missing likes field",
     author: "Nikolai Roshchin",
     url: "https://localhost.com/",
-}
+  }
 
     await api
     .post('/api/blogs')
@@ -71,6 +71,51 @@ test('verifies that likes property will default to 0 is missing', async () => {
     assert.strictEqual( response.body.length, listWithManyBlogs.blogs.length + 1 )
     const content = response.body[response.body.length-1].likes
     assert.strictEqual( content, 0 )
+})
+
+test('verify that the title and url properties are present', async () => {
+  const newBlog = {
+    title: "",
+    author: "Nikolai Roshchin",
+    url: "",
+    likes: 1
+  }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+    const response = await api.get('/api/blogs')
+    assert.strictEqual( response.body.length, listWithManyBlogs.blogs.length )
+})
+
+test('single post deleting', async () => {
+  const id = '5a422a851b54a676234d17f7'
+  await api
+  .delete(`/api/blogs/${id}`)
+  .expect(204)
+
+  const response = await api.get('/api/blogs')
+  assert.strictEqual( response.body.length, listWithManyBlogs.blogs.length - 1 )
+})
+
+test('update blog post', async () => {
+  const id = '5a422a851b54a676234d17f7'
+  const updateBlog = {
+    title: "React patterns",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+    likes: 9
+  }
+
+  await api
+  .put(`/api/blogs/${id}`)
+  .send(updateBlog)
+  .expect(200)
+
+  const response = await api.get(`/api/blogs/${id}`)
+  assert.strictEqual( response.body.likes, 9 )
 })
 
 after(async () => {
